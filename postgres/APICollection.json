@@ -1,0 +1,379 @@
+{
+  "info": {
+    "_postman_id": "lms-api-collection-v1",
+    "name": "LMS Microservice API Collection",
+    "description": "Complete collection for Learning Management System microservice including request bodies, params, and response examples.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8081",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Student Module",
+      "item": [
+        {
+          "name": "Register Student",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentName\": \"John Doe\",\n  \"studentDob\": \"2001-05-15\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/students",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "students"]
+            }
+          }
+        },
+        {
+          "name": "Update Student",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentName\": \"Johnathan Doe\",\n  \"studentDob\": \"2001-05-15\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/students/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "students", "1"]
+            }
+          }
+        },
+        {
+          "name": "Get Student By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/students/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "students", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Student",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/students/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "students", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Instructor Module",
+      "item": [
+        {
+          "name": "Register Instructor",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"instructorName\": \"Dr. Alan Turing\",\n  \"instructorDob\": \"1980-01-01\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/instructors",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "instructors"]
+            }
+          }
+        },
+        {
+          "name": "Update Instructor",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"instructorName\": \"Dr. Alan M. Turing\",\n  \"instructorDob\": \"1980-01-01\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/instructors/10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "instructors", "10"]
+            }
+          }
+        },
+        {
+          "name": "Delete Instructor",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/instructors/10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "instructors", "10"]
+            }
+          }
+        },
+        {
+          "name": "Get Instructor Count",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/instructors/count",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "instructors", "count"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Course Module",
+      "item": [
+        {
+          "name": "Register Course",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"courseName\": \"Advanced Java Programming\",\n  \"courseFee\": 499.99,\n  \"instructorId\": 10\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/courses",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "courses"]
+            }
+          }
+        },
+        {
+          "name": "Delete Course",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/courses/101",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "courses", "101"]
+            }
+          }
+        },
+        {
+          "name": "Get Instructor by Course ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/courses/101/instructor",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "courses", "101", "instructor"]
+            }
+          }
+        },
+        {
+          "name": "Get Course Details by Course ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/courses/101/details",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "courses", "101", "details"]
+            }
+          }
+        },
+        {
+          "name": "Get Enrolled Students Count for Course",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/courses/101/students/count",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "courses", "101", "students", "count"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Enrollment Module",
+      "item": [
+        {
+          "name": "Enroll Student",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentId\": 1,\n  \"courseId\": 101,\n  \"status\": \"TO_DO\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/enrollments",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "enrollments"]
+            }
+          }
+        },
+        {
+          "name": "Withdraw Student",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/enrollments?studentId=1&courseId=101",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "enrollments"],
+              "query": [
+                {
+                  "key": "studentId",
+                  "value": "1"
+                },
+                {
+                  "key": "courseId",
+                  "value": "101"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Student Course Progress",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/enrollments/students/1/progress",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "enrollments", "students", "1", "progress"]
+            }
+          }
+        },
+        {
+          "name": "Get Enrolled Students Count in Org",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/enrollments/students/count",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "enrollments", "students", "count"]
+            }
+          }
+        },
+        {
+          "name": "Get Students by Course Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/enrollments/students?status=COMPLETED",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "enrollments", "students"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "COMPLETED"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Student Course Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentId\": 1,\n  \"courseId\": 101,\n  \"status\": \"COMPLETED\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/enrollments/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "enrollments", "status"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
