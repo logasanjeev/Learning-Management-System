@@ -1,23 +1,23 @@
-package com.microservice.postgres.service.impl;
+package com.microservice.mongodb.service.impl;
 
-import com.microservice.postgres.dto.request.CourseRequest;
-import com.microservice.postgres.dto.response.CourseDetailsResponse;
-import com.microservice.postgres.dto.response.CourseResponse;
-import com.microservice.postgres.dto.response.InstructorResponse;
-import com.microservice.postgres.dto.response.StudentResponse;
-import com.microservice.postgres.entity.Course;
-import com.microservice.postgres.entity.Instructor;
-import com.microservice.postgres.exception.CourseAlreadyExistsException;
-import com.microservice.postgres.exception.CourseNotFoundException;
-import com.microservice.postgres.exception.InstructorAlreadyAssignedException;
-import com.microservice.postgres.exception.InstructorNotFoundException;
-import com.microservice.postgres.mapper.CourseMapper;
-import com.microservice.postgres.mapper.InstructorMapper;
-import com.microservice.postgres.mapper.StudentMapper;
-import com.microservice.postgres.repository.CourseRepository;
-import com.microservice.postgres.repository.EnrollmentRepository;
-import com.microservice.postgres.repository.InstructorRepository;
-import com.microservice.postgres.service.CourseService;
+import com.microservice.mongodb.dto.request.CourseRequest;
+import com.microservice.mongodb.dto.response.CourseDetailsResponse;
+import com.microservice.mongodb.dto.response.CourseResponse;
+import com.microservice.mongodb.dto.response.InstructorResponse;
+import com.microservice.mongodb.dto.response.StudentResponse;
+import com.microservice.mongodb.entity.Course;
+import com.microservice.mongodb.entity.Instructor;
+import com.microservice.mongodb.exception.CourseNotFoundException;
+import com.microservice.mongodb.exception.InstructorAlreadyAssignedException;
+import com.microservice.mongodb.exception.InstructorNotFoundException;
+import com.microservice.mongodb.mapper.CourseMapper;
+import com.microservice.mongodb.mapper.InstructorMapper;
+import com.microservice.mongodb.mapper.StudentMapper;
+import com.microservice.mongodb.repository.CourseRepository;
+import com.microservice.mongodb.repository.EnrollmentRepository;
+import com.microservice.mongodb.repository.InstructorRepository;
+import com.microservice.mongodb.service.CourseService;
+import com.microservice.mongodb.service.SequenceGeneratorService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,12 +36,15 @@ public class CourseServiceImpl implements CourseService {
     private final EnrollmentRepository enrollmentRepository;
     private final InstructorMapper instructorMapper;
     private final StudentMapper studentMapper;
+    private final SequenceGeneratorService sequenceGenerator;
+
     @Override
     @Transactional
     public CourseResponse registerCourse(CourseRequest request) {
         log.info("Attempting to register course with name: {}", request.getCourseName());
 
         Course course = courseMapper.toEntity(request);
+        course.setCourseId(sequenceGenerator.generateSequence("courses_sequence"));
 
         if (request.getInstructorId() != null) {
             Long instructorId = request.getInstructorId();
@@ -52,7 +55,7 @@ public class CourseServiceImpl implements CourseService {
                         return new InstructorNotFoundException("Instructor not found with ID: " + instructorId);
                     });
 
-            if (courseRepository.existsByInstructorInstructorId(instructorId)) {
+            if (courseRepository.existsByInstructor_InstructorId(instructorId)) {
                 log.warn("Course registration failed. Instructor ID {} is already assigned to another course", instructorId);
                 throw new InstructorAlreadyAssignedException("Instructor ID " + instructorId + " is already assigned to a course");
             }
@@ -104,11 +107,11 @@ public class CourseServiceImpl implements CourseService {
                     return new CourseNotFoundException("Course not found with ID: " + courseId);
                 });
 
-        InstructorResponse instructorResponse = instructorRepository.findByCourseId(courseId)
-                .map(instructorMapper::toResponse)
-                .orElse(null);
+        InstructorResponse instructorResponse = (course.getInstructor() != null)
+                ? instructorMapper.toResponse(course.getInstructor())
+                : null;
 
-        List<StudentResponse> studentResponses = enrollmentRepository.findAllByCourseId(courseId)
+        List<StudentResponse> studentResponses = enrollmentRepository.findByCourse_CourseId(courseId)
                 .stream()
                 .map(enrollment -> studentMapper.toResponse(enrollment.getStudent()))
                 .toList();
