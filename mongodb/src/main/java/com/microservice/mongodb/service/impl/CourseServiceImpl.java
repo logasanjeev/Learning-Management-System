@@ -20,6 +20,9 @@ import com.microservice.mongodb.service.CourseService;
 import com.microservice.mongodb.service.SequenceGeneratorService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,6 +73,10 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "courses", key = "#courseId"),
+            @CacheEvict(value = "instructorsByCourse", key = "#courseId")
+    })
     public void deleteCourse(Long courseId) {
         log.info("Attempting to delete course with ID: {}", courseId);
 
@@ -84,6 +91,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "courses", key = "#courseId")
     public CourseResponse getCourseById(Long courseId) {
         log.info("Fetching course details for ID: {}", courseId);
 

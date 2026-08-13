@@ -12,6 +12,10 @@ import com.microservice.mongodb.service.InstructorService;
 import com.microservice.mongodb.service.SequenceGeneratorService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +44,10 @@ public class InstructorServiceImpl implements InstructorService {
 
     @Override
     @Transactional
+    @Caching(
+            put = @CachePut(value = "instructors", key = "#instructorId"),
+            evict = @CacheEvict(value = "instructorsByCourse", allEntries = true)
+    )
     public InstructorResponse updateInstructor(Long instructorId, InstructorRequest request) {
         log.info("Attempting to update instructor details for ID: {}", instructorId);
 
@@ -57,6 +65,10 @@ public class InstructorServiceImpl implements InstructorService {
 
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "instructors", key = "#instructorId"),
+            @CacheEvict(value = "instructorsByCourse", allEntries = true)
+    })
     public void deleteInstructor(Long instructorId) {
         log.info("Attempting to delete instructor with ID: {}", instructorId);
 
@@ -71,6 +83,7 @@ public class InstructorServiceImpl implements InstructorService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "instructors", key = "#instructorId")
     public InstructorResponse getInstructorById(Long instructorId) {
         log.info("Fetching instructor details for ID: {}", instructorId);
 
@@ -92,6 +105,7 @@ public class InstructorServiceImpl implements InstructorService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "instructorsByCourse", key = "#courseId")
     public InstructorResponse getInstructorByCourseId(Long courseId) {
         log.info("Fetching instructor details for course ID: {}", courseId);
 

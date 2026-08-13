@@ -10,6 +10,9 @@ import com.microservice.mongodb.service.SequenceGeneratorService;
 import com.microservice.mongodb.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +40,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional
+    @CachePut(value = "students", key = "#studentId")
     public StudentResponse updateStudent(Long studentId, StudentRequest request) {
         log.info("Attempting to update student details for ID: {}", studentId);
 
@@ -54,6 +58,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "students", key = "#studentId")
     public void deleteStudent(Long studentId) {
         log.info("Attempting to delete student with ID: {}", studentId);
 
@@ -68,6 +73,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "students", key = "#studentId")
     public StudentResponse getStudentById(Long studentId) {
         log.info("Fetching student details for ID: {}", studentId);
 
