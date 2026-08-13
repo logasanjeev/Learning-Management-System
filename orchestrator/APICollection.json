@@ -1,0 +1,628 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-1234567890ef",
+    "name": "LMS Feign Orchestrator Service (:8080)",
+    "description": "Postman collection for testing the Spring Cloud OpenFeign Orchestration Microservice.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080/api/v1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Student APIs",
+      "item": [
+        {
+          "name": "POST Register Student (POSTGRES)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentName\": \"John Doe\",\n  \"studentDob\": \"2001-05-15\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/POSTGRES/students",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "POSTGRES",
+                "students"
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST Register Student (MONGODB)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentName\": \"Jane Smith\",\n  \"studentDob\": \"2002-10-20\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/MONGODB/students",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "MONGODB",
+                "students"
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Student By ID (POSTGRES)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/POSTGRES/students/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "POSTGRES",
+                "students",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Student By ID (MONGODB)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/MONGODB/students/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "MONGODB",
+                "students",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "PUT Update Student (POSTGRES)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentName\": \"Johnathan Doe\",\n  \"studentDob\": \"2001-05-15\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/POSTGRES/students/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "POSTGRES",
+                "students",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "DELETE Student (POSTGRES)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/POSTGRES/students/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "POSTGRES",
+                "students",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Instructor APIs",
+      "item": [
+        {
+          "name": "POST Register Instructor (POSTGRES)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"instructorName\": \"Dr. Robert Ford\",\n  \"instructorDob\": \"1980-03-12\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/POSTGRES/instructors",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "POSTGRES",
+                "instructors"
+              ]
+            }
+          }
+        },
+        {
+          "name": "PUT Update Instructor (MONGODB)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"instructorName\": \"Dr. Robert Ford Sr.\",\n  \"instructorDob\": \"1980-03-12\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/MONGODB/instructors/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "MONGODB",
+                "instructors",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Instructor Count (POSTGRES)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/POSTGRES/instructors/count",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "POSTGRES",
+                "instructors",
+                "count"
+              ]
+            }
+          }
+        },
+        {
+          "name": "DELETE Instructor (POSTGRES)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/POSTGRES/instructors/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "POSTGRES",
+                "instructors",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Course APIs",
+      "item": [
+        {
+          "name": "POST Register Course (POSTGRES)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"courseName\": \"Spring Boot Microservices\",\n  \"courseFee\": 299.99,\n  \"instructorId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/POSTGRES/courses",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "POSTGRES",
+                "courses"
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Course Instructor (POSTGRES)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/POSTGRES/courses/1/instructor",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "POSTGRES",
+                "courses",
+                "1",
+                "instructor"
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Course Details (MONGODB)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/MONGODB/courses/1/details",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "MONGODB",
+                "courses",
+                "1",
+                "details"
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Enrolled Students Count By Course (POSTGRES)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/POSTGRES/courses/1/students/count",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "POSTGRES",
+                "courses",
+                "1",
+                "students",
+                "count"
+              ]
+            }
+          }
+        },
+        {
+          "name": "DELETE Course (POSTGRES)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/POSTGRES/courses/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "POSTGRES",
+                "courses",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Enrollment APIs",
+      "item": [
+        {
+          "name": "POST Enroll Student (POSTGRES)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentId\": 1,\n  \"courseId\": 1,\n  \"status\": \"TO_DO\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/POSTGRES/enrollments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "POSTGRES",
+                "enrollments"
+              ]
+            }
+          }
+        },
+        {
+          "name": "PATCH Update Student Course Status (MONGODB)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentId\": 1,\n  \"courseId\": 1,\n  \"status\": \"IN_PROGRESS\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/MONGODB/enrollments/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "MONGODB",
+                "enrollments",
+                "status"
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Student Progress (POSTGRES)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/POSTGRES/enrollments/students/1/progress",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "POSTGRES",
+                "enrollments",
+                "students",
+                "1",
+                "progress"
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Students By Status (Query Param) (POSTGRES)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/POSTGRES/enrollments/students?status=IN_PROGRESS",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "POSTGRES",
+                "enrollments",
+                "students"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "IN_PROGRESS"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Enrolled Students Count In Org (MONGODB)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/MONGODB/enrollments/students/count",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "MONGODB",
+                "enrollments",
+                "students",
+                "count"
+              ]
+            }
+          }
+        },
+        {
+          "name": "DELETE Withdraw Student (Query Params) (POSTGRES)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/POSTGRES/enrollments?studentId=1&courseId=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "POSTGRES",
+                "enrollments"
+              ],
+              "query": [
+                {
+                  "key": "studentId",
+                  "value": "1"
+                },
+                {
+                  "key": "courseId",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Handled Errors & Edge Cases",
+      "item": [
+        {
+          "name": "ERROR 400 - Invalid Database Selector (ORACLE)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ORACLE/students/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ORACLE",
+                "students",
+                "1"
+              ]
+            },
+            "description": "Tests MethodArgumentTypeMismatchException handling when an unsupported database enum is provided."
+          }
+        },
+        {
+          "name": "ERROR 400 - Validation Failure (Blank Student Name)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentName\": \"\",\n  \"studentDob\": \"2001-05-15\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/POSTGRES/students",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "POSTGRES",
+                "students"
+              ]
+            },
+            "description": "Tests MethodArgumentNotValidException when required fields fail @NotBlank."
+          }
+        },
+        {
+          "name": "ERROR 400 - Validation Failure (Future DOB)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"instructorName\": \"Professor Time Traveler\",\n  \"instructorDob\": \"2099-01-01\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/POSTGRES/instructors",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "POSTGRES",
+                "instructors"
+              ]
+            },
+            "description": "Tests @Past validation rule on date of birth."
+          }
+        },
+        {
+          "name": "ERROR 400 - Validation Failure (Negative Course Fee)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"courseName\": \"Invalid Pricing Course\",\n  \"courseFee\": -50.00\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/POSTGRES/courses",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "POSTGRES",
+                "courses"
+              ]
+            },
+            "description": "Tests @PositiveOrZero validation rule on course fee."
+          }
+        },
+        {
+          "name": "ERROR 503 - Service Unavailable (Simulate downstream down)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/POSTGRES/students/999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "POSTGRES",
+                "students",
+                "999"
+              ]
+            },
+            "description": "Stop port 8081 before running this to verify RetryableException triggers a 503 Service Unavailable response."
+          }
+        }
+      ]
+    }
+  ]
+}
