@@ -16,6 +16,9 @@ import com.microservice.postgres.repository.StudentRepository;
 import com.microservice.postgres.service.EnrollmentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +38,35 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "studentProgress", key = "#studentId"),
+            @CacheEvict(value = "courseDetails", key = "#courseId"),
+            @CacheEvict(value = "courseStudentCount", key = "#courseId"),
+            @CacheEvict(value = "studentsByCourse", key = "#courseId"),
+            @CacheEvict(value = "studentsByStatus", allEntries = true)
+    })
+    public void withdrawStudent(Long studentId, Long courseId) {
+        log.info("Attempting to withdraw student ID: {} from course ID: {}", studentId, courseId);
+
+        Enrollment enrollment = enrollmentRepository.findByStudentStudentIdAndCourseCourseId(studentId, courseId)
+                .orElseThrow(() -> {
+                    log.warn("Withdrawal failed. No enrollment found for student ID: {} in course ID: {}", studentId, courseId);
+                    return new EnrollmentNotFoundException("Enrollment record not found for student ID: " + studentId + " in course ID: " + courseId);
+                });
+
+        enrollmentRepository.delete(enrollment);
+        log.info("Successfully withdrew student ID: {} from course ID: {}", studentId, courseId);
+    }
+
+    @Override
+    @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "studentProgress", key = "#request.studentId"),
+            @CacheEvict(value = "courseDetails", key = "#request.courseId"),
+            @CacheEvict(value = "courseStudentCount", key = "#request.courseId"),
+            @CacheEvict(value = "studentsByCourse", key = "#request.courseId"),
+            @CacheEvict(value = "studentsByStatus", allEntries = true)
+    })
     public EnrollmentResponse enrollStudent(EnrollmentRequest request) {
         Long studentId = request.getStudentId();
         Long courseId = request.getCourseId();
@@ -69,22 +101,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    @Transactional
-    public void withdrawStudent(Long studentId, Long courseId) {
-        log.info("Attempting to withdraw student ID: {} from course ID: {}", studentId, courseId);
-
-        Enrollment enrollment = enrollmentRepository.findByStudentStudentIdAndCourseCourseId(studentId, courseId)
-                .orElseThrow(() -> {
-                    log.warn("Withdrawal failed. No enrollment found for student ID: {} in course ID: {}", studentId, courseId);
-                    return new EnrollmentNotFoundException("Enrollment record not found for student ID: " + studentId + " in course ID: " + courseId);
-                });
-
-        enrollmentRepository.delete(enrollment);
-        log.info("Successfully withdrew student ID: {} from course ID: {}", studentId, courseId);
-    }
-
-    @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "studentProgress", key = "#studentId")
     public List<EnrollmentResponse> getStudentProgress(Long studentId) {
         log.info("Fetching progress for student ID: {}", studentId);
 
@@ -100,6 +118,11 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "studentProgress", key = "#request.studentId"),
+            @CacheEvict(value = "courseDetails", key = "#request.courseId"),
+            @CacheEvict(value = "studentsByStatus", allEntries = true)
+    })
     public EnrollmentResponse updateCourseStatus(EnrollmentRequest request) {
         Long studentId = request.getStudentId();
         Long courseId = request.getCourseId();
@@ -135,6 +158,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "courseStudentCount", key = "#courseId")
     public long getCourseStudentCount(Long courseId) {
         log.info("Counting enrolled students for course ID: {}", courseId);
 
@@ -148,6 +172,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "studentsByCourse", key = "#courseId")
     public List<StudentResponse> getStudentsByCourseId(Long courseId) {
         log.info("Fetching enrolled student details for course ID: {}", courseId);
 
@@ -164,6 +189,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "studentsByStatus", key = "#status")
     public List<StudentResponse> getStudentsByStatus(CourseStatus status) {
         log.info("Fetching all students filtered by course status: {}", status);
 
@@ -183,6 +209,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "courseStudentCount", key = "#courseId")
     public long getEnrolledStudentsCountByCourse(Long courseId) {
         log.info("Counting enrolled students for course ID: {}", courseId);
         return enrollmentRepository.countByCourseId(courseId);
@@ -197,6 +224,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "studentsByStatus", key = "#status")
     public List<StudentResponse> getStudentsByCourseStatus(CourseStatus status) {
         log.info("Fetching students with course status: {}", status);
         return enrollmentRepository.findByStatus(status)

@@ -7,7 +7,6 @@ import com.microservice.postgres.dto.response.InstructorResponse;
 import com.microservice.postgres.dto.response.StudentResponse;
 import com.microservice.postgres.entity.Course;
 import com.microservice.postgres.entity.Instructor;
-import com.microservice.postgres.exception.CourseAlreadyExistsException;
 import com.microservice.postgres.exception.CourseNotFoundException;
 import com.microservice.postgres.exception.InstructorAlreadyAssignedException;
 import com.microservice.postgres.exception.InstructorNotFoundException;
@@ -20,6 +19,9 @@ import com.microservice.postgres.repository.InstructorRepository;
 import com.microservice.postgres.service.CourseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,8 +38,10 @@ public class CourseServiceImpl implements CourseService {
     private final EnrollmentRepository enrollmentRepository;
     private final InstructorMapper instructorMapper;
     private final StudentMapper studentMapper;
+
     @Override
     @Transactional
+    @CacheEvict(value = "instructorByCourse", allEntries = true)
     public CourseResponse registerCourse(CourseRequest request) {
         log.info("Attempting to register course with name: {}", request.getCourseName());
 
@@ -67,6 +71,13 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "courses", key = "#courseId"),
+            @CacheEvict(value = "courseDetails", key = "#courseId"),
+            @CacheEvict(value = "instructorByCourse", key = "#courseId"),
+            @CacheEvict(value = "courseStudentCount", key = "#courseId"),
+            @CacheEvict(value = "studentsByCourse", key = "#courseId")
+    })
     public void deleteCourse(Long courseId) {
         log.info("Attempting to delete course with ID: {}", courseId);
 
@@ -81,6 +92,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "courses", key = "#courseId")
     public CourseResponse getCourseById(Long courseId) {
         log.info("Fetching course details for ID: {}", courseId);
 
@@ -95,6 +107,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "courseDetails", key = "#courseId")
     public CourseDetailsResponse getCourseDetails(Long courseId) {
         log.info("Fetching complete course details for course ID: {}", courseId);
 

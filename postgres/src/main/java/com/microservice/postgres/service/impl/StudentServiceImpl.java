@@ -3,13 +3,15 @@ package com.microservice.postgres.service.impl;
 import com.microservice.postgres.dto.request.StudentRequest;
 import com.microservice.postgres.dto.response.StudentResponse;
 import com.microservice.postgres.entity.Student;
-import com.microservice.postgres.exception.StudentAlreadyExistsException;
 import com.microservice.postgres.exception.StudentNotFoundException;
 import com.microservice.postgres.mapper.StudentMapper;
 import com.microservice.postgres.repository.StudentRepository;
 import com.microservice.postgres.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +36,12 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "students", key = "#studentId"),
+            @CacheEvict(value = "studentProgress", key = "#studentId"),
+            @CacheEvict(value = "studentsByCourse", allEntries = true),
+            @CacheEvict(value = "studentsByStatus", allEntries = true)
+    })
     public StudentResponse updateStudent(Long studentId, StudentRequest request) {
         log.info("Attempting to update student details for ID: {}", studentId);
 
@@ -51,6 +59,12 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "students", key = "#studentId"),
+            @CacheEvict(value = "studentProgress", key = "#studentId"),
+            @CacheEvict(value = "studentsByCourse", allEntries = true),
+            @CacheEvict(value = "studentsByStatus", allEntries = true)
+    })
     public void deleteStudent(Long studentId) {
         log.info("Attempting to delete student with ID: {}", studentId);
 
@@ -65,6 +79,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "students", key = "#studentId")
     public StudentResponse getStudentById(Long studentId) {
         log.info("Fetching student details for ID: {}", studentId);
 
